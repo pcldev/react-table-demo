@@ -26,6 +26,9 @@ const Table: FC<TableProps> = ({
     canPreviousPage,
     pageOptions,
     state,
+    gotoPage,
+    pageCount,
+    setPageSize,
     rows,
     prepareRow,
   } = useTable<Data>(
@@ -35,7 +38,7 @@ const Table: FC<TableProps> = ({
     },
     usePagination
   );
-  const { pageIndex } = state;
+  const { pageIndex, pageSize } = state;
   return (
     <>
       <table {...getTableProps()}>
@@ -69,11 +72,39 @@ const Table: FC<TableProps> = ({
             {pageIndex + 1} of {pageOptions.length}
           </strong>
         </span>
+        <select value={pageSize} onChange={(e) => setPageSize(+e.target.value)}>
+          {[10, 25, 50].map((pagesize) => (
+            <option value={pagesize} key={pagesize}>
+              {pagesize}
+            </option>
+          ))}
+        </select>
+        <span>
+          | Go to page:
+          <input
+            type="number"
+            defaultValue={pageIndex + 1}
+            onChange={(e) => {
+              const pageNumber = e.target.value ? +e.target.value - 1 : 0;
+              gotoPage(pageNumber);
+            }}
+            style={{ width: "50px" }}
+          />
+        </span>
+        <button onClick={gotoPage.bind(null, 0)} disabled={!canPreviousPage}>
+          {"<<"}
+        </button>{" "}
         <button onClick={previousPage} disabled={!canPreviousPage}>
           Previous
         </button>
         <button onClick={nextPage} disabled={!canNextPage}>
           Next
+        </button>
+        <button
+          onClick={gotoPage.bind(null, pageCount - 1)}
+          disabled={!canNextPage}
+        >
+          {">>"}
         </button>
       </div>
     </>
