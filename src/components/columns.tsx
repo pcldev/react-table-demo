@@ -2,6 +2,7 @@ import { Column, CellProps } from "react-table";
 import { format } from "date-fns";
 import React, { ReactFragment } from "react";
 import ColumnFilter from "./ColumnFilter";
+import "./columns.css";
 export interface Col {
   Header: string;
   accessor: string;
@@ -51,7 +52,7 @@ export const COLUMNS: Column<Data>[] = [
       const original = value.cell.row.original;
       return (
         <>
-          <h2>Hey</h2>
+          <h2 className="red">{original.email}</h2>
           <span>{format(new Date(original.date_of_birth), "dd/MM/yyyy")}</span>
         </>
       );
